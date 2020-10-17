@@ -22,7 +22,7 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs12.x
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -61,7 +61,7 @@ functions:
                 serviceName: true
                 serviceVersion: true
           cors:
-            origin: '*'
+            origin: "*"
             allowCredentials: true
 
   register:
@@ -87,27 +87,27 @@ resources:
         Name: ${self:custom.stage}-ServiceDiscoveryApi
 
     GatewayResponseDefault4XX:
-      Type: 'AWS::ApiGateway::GatewayResponse'
+      Type: "AWS::ApiGateway::GatewayResponse"
       Properties:
         ResponseParameters:
           gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
           gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
         ResponseType: DEFAULT_4XX
         RestApiId:
-          Ref: 'ServiceDiscoveryApiGateway'
+          Ref: "ServiceDiscoveryApiGateway"
 
     GatewayResponseDefault5XX:
-      Type: 'AWS::ApiGateway::GatewayResponse'
+      Type: "AWS::ApiGateway::GatewayResponse"
       Properties:
         ResponseParameters:
           gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
           gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
         ResponseType: DEFAULT_5XX
         RestApiId:
-          Ref: 'ServiceDiscoveryApiGateway'
+          Ref: "ServiceDiscoveryApiGateway"
 
     ServicesDB:
-      Type: 'AWS::DynamoDB::Table'
+      Type: "AWS::DynamoDB::Table"
       Properties:
         AttributeDefinitions:
           - AttributeName: serviceName
@@ -124,7 +124,6 @@ resources:
           WriteCapacityUnits: 10
         TableName: ${self:custom.table}
 
-
   Outputs:
     ServiceDiscoveryRestApiId:
       Value:
@@ -139,5 +138,3 @@ resources:
           - RootResourceId
       Export:
         Name: ${self:custom.stage}-ServiceDiscoveryRestApiRootResourceId
-
-
