@@ -1,4 +1,4 @@
-# EnvyForge Identity Service
+# Envy Forge Identity Service
 
 ## SaaS Identity with Cognito using Lambda Microservices
 
