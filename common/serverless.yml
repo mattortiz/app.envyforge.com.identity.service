@@ -1,3 +1,4 @@
+# todo: change to app.envyforge.com.identity.service
 service: SaaSServerless-common
 
 # Use the serverless-webpack plugin to transpile ES6
