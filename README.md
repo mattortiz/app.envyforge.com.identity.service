@@ -2,7 +2,7 @@
 
 ## SaaS Identity with Cognito using Lambda Microservices
 
-This is a reference architecture based on the "SaaS Identiry and Isolation with Amazon Cognito on the AWS Cloud Quickstart". This architecture is based of the architecture details in this [deployment guide](https://fwd.aws/XKYDP).
+This is a reference architecture based on the "SaaS Identity and Isolation with Amazon Cognito on the AWS Cloud Quickstart". This architecture is based of the architecture details in this [deployment guide](https://fwd.aws/XKYDP).
 
 The architecture was changed from using EC2 instances for the microservices, to using lambda functions behind a common API gateway. Here are the major differences between this version and the AWS Quickstart.
 
@@ -64,22 +64,21 @@ Access to these services are thru the client.
 
 You will need to cleanup and remove the resources so that you are not charged for any usage in your account. This is a 2 phase process.
 
-#### Phase1
+##### DANGER: THIS WILL TEARDOWN YOUR AWS ENVIRONMENT - ONLY USE FOR NON-PRODUCTION OR NON-CRITICAL ENVIRONMENTS
+
+### Phase 1
 
 - First you need to follow the instructions in the **`<code-dir>/app.envyforge.com.identity/client/readme.md`** section on Cleanup. This phase will remove tenants and cleanup any created UserPools, etc.
-  
-#### Phase 2
 
-- Now run the following commands
+### Phase 2
+
+- Now run the following command from the **`<code-dir>/app.envyforge.com.identity/service/ directory`**. 
 
 ```
-cd <code-dir>/app.envyforge.com.identity/service/common
-npm run removeAll
-cd ../serviceDiscovery
-sls remove
+.../service > .teardown-services.sh
 ```
 
-- It may take a few minutes for AWS to remove all the resources.
+It may take a few minutes for AWS to remove all the resources.
 
 ## Acknowledgments / References
 

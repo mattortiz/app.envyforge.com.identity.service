@@ -8,6 +8,7 @@
     "offline": "sls offline start --stage localdev --port 3100 --noTimeout",
     "localdb": "serverless dynamodb start --stage local --port 8000 --dbPath ./LocalDB",
     "installCommon": "npm install",
+    "installServiceDsc": "cd ../serviceDiscovery && npm install",
     "install:AuthMgr": "cd ../authMgr && npm install",
     "install:OrderMgr": "cd ../orderMgr && npm install",
     "install:ProductMgr": "cd ../productMgr && npm install",
@@ -18,6 +19,7 @@
     "installDone": "echo '********** ALL DONE ***************'",
     "installAll": "npm-run-all installCommon install:* installDone",
     "deployCommon": "sls deploy",
+    "deployServiceDsc": "cd ../serviceDiscovery && sls deploy",
     "deploy:AuthMgr": "cd ../authMgr && sls deploy",
     "deploy:OrderMgr": "cd ../orderMgr && sls deploy",
     "deploy:ProductMgr": "cd ../productMgr && sls deploy",
@@ -28,6 +30,7 @@
     "deployDone": "echo '********** ALL DONE ***************'",
     "deployAll": "npm-run-all deployCommon deploy:* deployDone",
     "removeCommon": "sls remove",
+    "removeServiceDsc": "cd ../serviceDsc && sls remove",
     "remove:AuthMgr": "cd ../authMgr && sls remove",
     "remove:OrderMgr": "cd ../orderMgr && sls remove",
     "remove:ProductMgr": "cd ../productMgr && sls remove",
@@ -38,7 +41,7 @@
     "removeDone": "echo '********** ALL DONE ***************'",
     "removeAll": "npm-run-all  remove:* removeCommon deployDone"
   },
-  "author": "Bill Stoltz",
+  "author": "Matt Ortiz",
   "license": "MIT",
   "repository": {
     "type": "git",
