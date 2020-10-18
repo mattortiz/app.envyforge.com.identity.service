@@ -1,7 +1,7 @@
 {
   "Config": {
     "local": {
-      "projectName": "SaaSServerless",
+      "projectName": "EnvyForgeIdentity",
       "protocol": "http://",
       "domain": "localhost",
       "port": {
@@ -45,7 +45,7 @@
       }
     },
     "localdev": {
-      "projectName": "SaaSServerless",
+      "projectName": "EnvyForgeIdentity",
       "protocol": "http://",
       "domain": "localhost",
       "port": {
@@ -89,7 +89,7 @@
       }
     },
     "dev":{
-      "projectName": "SaaSServerless",
+      "projectName": "EnvyForgeIdentity",
       "protocol": "https://",
       "domain": "localhost",
       "port": {
@@ -130,7 +130,7 @@
       }
     },
     "prod":{
-      "projectName": "SaaSServerless",
+      "projectName": "EnvyForgeIdentity",
       "protocol": "https://",
       "port-deprecated": {
         "auth": 3000,

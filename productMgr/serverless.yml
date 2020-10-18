@@ -1,4 +1,4 @@
-service: SaaSServerless-ProductMgr
+service: EnvyForgeIdentity-ProductMgr
 
 # Use the serverless-webpack plugin to transpile ES6
 plugins:
@@ -60,22 +60,22 @@ provider:
     PRODUCT_TABLE: ${self:custom.table.product}
 
     restApiId:
-      "Fn::ImportValue": ${self:custom.stage}-SaaSServerlessApiRestApiId
+      "Fn::ImportValue": ${self:custom.stage}-EnvyForgeIdentityApiRestApiId
     apiURL: ${file(../common/common.yml):${self:custom.stage}.apiURL, file(../common/common.yml):dev.apiURL}
-    PROJECT_NAME: ${cf:SaaSServerless-common-${self:custom.stage}.ProjectName,'SaaSServerless'}
+    PROJECT_NAME: ${cf:EnvyForgeIdentity-common-${self:custom.stage}.ProjectName,'EnvyForgeIdentity'}
     serviceURL: ${file(../common/common.yml):${self:custom.stage}.serviceURL, file(../common/common.yml):dev.serviceURL}
 
     SNS_ROLE_ARN:
-      "Fn::ImportValue": ${self:custom.stage}-SaaSServerlessSNSRoleArn
+      "Fn::ImportValue": ${self:custom.stage}-EnvyForgeIdentitySNSRoleArn
 
     NODE_CONFIG_DIR: ${self:custom.configdir.${self:custom.stage}}
 
   # define share ApiGateway
   apiGateway:
     restApiId:
-      "Fn::ImportValue": ${self:custom.stage}-SaaSServerlessApiRestApiId
+      "Fn::ImportValue": ${self:custom.stage}-EnvyForgeIdentityApiRestApiId
     restApiRootResourceId:
-      "Fn::ImportValue": ${self:custom.stage}-SaaSServerlessApiRestApiRootResourceId
+      "Fn::ImportValue": ${self:custom.stage}-EnvyForgeIdentityApiRestApiRootResourceId
 
 functions:
   - ${file(${self:custom.productdir}productMgr-functions.yml)}

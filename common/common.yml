@@ -5,7 +5,7 @@ dev:
     Fn::Join:
       - ""
       - - "https://"
-        - "Fn::ImportValue": ${self:custom.stage}-SaaSServerlessApiRestApiId
+        - "Fn::ImportValue": ${self:custom.stage}-EnvyForgeIdentityApiRestApiId
         - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.stage}"
 
   serviceURL:
@@ -17,18 +17,18 @@ dev:
 
   authorizer:
     type: CUSTOM
-    authorizerId: ${cf:SaaSServerless-common-${self:custom.stage}.ApiGatewayAuthorizerId}
+    authorizerId: ${cf:EnvyForgeIdentity-common-${self:custom.stage}.ApiGatewayAuthorizerId}
 
   resources:
     Resources:
-      SaaSServerlessAuthorizer:
+      EnvyForgeIdentityAuthorizer:
         Type: AWS::ApiGateway::Authorizer
         Properties:
           AuthorizerResultTtlInSeconds: 300
           IdentitySource: method.request.header.Authorization
-          Name: ${self:custom.stage}-SaaSServerlessAuthorizer
+          Name: ${self:custom.stage}-EnvyForgeIdentityAuthorizer
           RestApiId:
-            Ref: SaaSServerlessApiGateway
+            Ref: EnvyForgeIdentityApiGateway
           AuthorizerUri:
             Fn::Join:
               - ""
@@ -39,13 +39,13 @@ dev:
                 - "/invocations"
           Type: TOKEN
           AuthorizerCredentials:
-            Fn::GetAtt: [SaaSServerlessApiLambdaRole, Arn]
+            Fn::GetAtt: [EnvyForgeIdentityApiLambdaRole, Arn]
 
-      SaaSServerlessApiLambdaRole:
+      EnvyForgeIdentityApiLambdaRole:
         Type: AWS::IAM::Role
         Properties:
           Path: /
-          RoleName: SaaSServerlessApiLambdaRole
+          RoleName: EnvyForgeIdentityApiLambdaRole
           AssumeRolePolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -55,7 +55,7 @@ dev:
                   Service: apigateway.amazonaws.com
                 Action: sts:AssumeRole
           Policies:
-            - PolicyName: SaaSServerless-ApiLambdaPolicy
+            - PolicyName: EnvyForgeIdentity-ApiLambdaPolicy
               PolicyDocument:
                 Version: "2012-10-17"
                 Statement:
@@ -71,7 +71,7 @@ dev:
             gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
           ResponseType: DEFAULT_4XX
           RestApiId:
-            Ref: "SaaSServerlessApiGateway"
+            Ref: "EnvyForgeIdentityApiGateway"
       GatewayResponseDefault5XX:
         Type: "AWS::ApiGateway::GatewayResponse"
         Properties:
@@ -80,7 +80,7 @@ dev:
             gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
           ResponseType: DEFAULT_5XX
           RestApiId:
-            Ref: "SaaSServerlessApiGateway"
+            Ref: "EnvyForgeIdentityApiGateway"
       SNSRole:
         Type: AWS::IAM::Role
         Properties:
@@ -94,7 +94,7 @@ dev:
                   Service: cognito-idp.amazonaws.com
                 Action: sts:AssumeRole
           Policies:
-            - PolicyName: SaaSServerless-SNSRolePolicy
+            - PolicyName: EnvyForgeIdentity-SNSRolePolicy
               PolicyDocument:
                 Version: "2012-10-17"
                 Statement:
@@ -116,5 +116,5 @@ localdev:
     Fn::Join:
       - ""
       - - "https://"
-        - "Fn::ImportValue": ${self:custom.stage}-SaaSServerlessApiRestApiId
+        - "Fn::ImportValue": ${self:custom.stage}-EnvyForgeIdentityApiRestApiId
         - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.stage}"
