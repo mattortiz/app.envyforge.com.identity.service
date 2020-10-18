@@ -1,10 +1,10 @@
-# SaaSServerless-Identity
+# EnvyForge Identity Service
 
 ## SaaS Identity with Cognito using Lambda Microservices
 
 This is a reference architecture based on the "SaaS Identiry and Isolation with Amazon Cognito on the AWS Cloud Quickstart". This architecture is based of the architecture details in this [deployment guide](https://fwd.aws/XKYDP).
 
-The architecture was changed from using EC2 instances for the microservices, to create lambda functions behind a common API gateway. Here are the major differences between this version and the AWS Quickstart.
+The architecture was changed from using EC2 instances for the microservices, to using lambda functions behind a common API gateway. Here are the major differences between this version and the AWS Quickstart.
 
 - Uses the Serverless Framework to define services instead of CloudFormation.
 - Breaks out each microservice into a separate Serverless service directory.
@@ -24,12 +24,11 @@ The architecture was changed from using EC2 instances for the microservices, to 
 
 ## Prerequisites
 
-1. Node.js v8.10 or later
+1. Node.js v12.x or later
 2. An AWS account. A free tier account will work with minimal cost. The account should have admin permissions, or ability to create resources on AWS.
 3. Serverless CLI v1.9.0 or later. See [Serverless Quickstart](https://serverless.com/framework/docs/providers/aws/guide/quick-start/) for more details.
 4. Setup provider Credentials. See [Serverless Quickstart](https://serverless.com/framework/docs/providers/aws/guide/quick-start/) for more details.
-5. Clone github repository.
-   - git clone https://github.com/bwsolutions/SaaSServerless-Identity.git
+5. Clone this repository.
 
 ## Configuration
 
@@ -41,7 +40,7 @@ The architecture was changed from using EC2 instances for the microservices, to 
 
 The following steps will install and setup the microservices on AWS, using your AWS account. Make sure your account has Admin permissions, or permissions to create resources on AWS.
 
-1. cd SaaSServerless-Identity
+1. cd `<code-dir>`/app.envyforge.com.identity/service
 2. cd serviceDiscovery
 3. npm install
 4. sls deploy
@@ -50,28 +49,32 @@ The following steps will install and setup the microservices on AWS, using your 
 7. npm run installAll
 8. npm run deployAll
 
-Next step - go to [SaaSServerless-Client](https://github.com/bwsolutions/SaaSServerless-Client) and complete the installation for the client.
+Next step
+
+- Go to **`<code-dir>/app.envyforge.com.identity/client/readme.md`** and complete the installation for the client.
 
 ## Usage example
 
 Access to these services are thru the client.
 
-- Go to [SaaSServerless-Client](https://github.com/bwsolutions/SaaSServerless-Client) for details on how to access the system.
+- Go to **`<code-dir>/app.envyforge.com.identity/client/readme.md`** for details on how to access the system.
 - You can monitor logs for each microservice in CloudWatch .
 
 ## Cleanup
 
 You will need to cleanup and remove the resources so that you are not charged for any usage in your account. This is a 2 phase process.
-####Phase1
 
-- First you need to follow the instructions in the [SaaSServerless-Client README.md ](https://github.com/bwsolutions/SaaSServerless-Client) section on Cleanup. This phase will remove tenants and cleanup any created UserPools, etc.
-  ####Phase 2
-  Continue Cleanup process here
+#### Phase1
+
+- First you need to follow the instructions in the **`<code-dir>/app.envyforge.com.identity/client/readme.md`** section on Cleanup. This phase will remove tenants and cleanup any created UserPools, etc.
+  
+#### Phase 2
+
 - Now run the following commands
 
 ```
-cd SaaSServerless-Identity/common
-npm run RemoveAll
+cd <code-dir>/app.envyforge.com.identity/service/common
+npm run removeAll
 cd ../serviceDiscovery
 sls remove
 ```
@@ -86,3 +89,4 @@ sls remove
 ## Author
 
 - Bill Stoltz - Booster Web Solutions
+- Matt Ortiz - Envy Forge
