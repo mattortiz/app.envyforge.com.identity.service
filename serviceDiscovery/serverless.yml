@@ -1,4 +1,4 @@
-service: SaaSServerless-serviceRegistry
+service: EnvyForgeIdentity-serviceRegistry
 
 # Use the serverless-webpack plugin to transpile ES6
 plugins:

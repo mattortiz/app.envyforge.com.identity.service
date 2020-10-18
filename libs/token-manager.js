@@ -1,17 +1,16 @@
-'use strict';
+"use strict";
 
 // Declare library dependencies
-const jwtDecode = require('jwt-decode');
-const request = require('request');
-const async = require('async');
-const AWS = require('aws-sdk');
-
+const jwtDecode = require("jwt-decode");
+const request = require("request");
+const async = require("async");
+const AWS = require("aws-sdk");
 
 //Configure Environment
-const configModule = require('./config-helper.js');
+const configModule = require("./config-helper.js");
 var configuration = configModule.configure(process.env.stage);
-const RequestHelper = require('../libs/request-helper');
-const serviceDiscovery = require('../serviceDiscovery/serviceDiscovery-helper');
+const RequestHelper = require("../libs/request-helper");
+const serviceDiscovery = require("../serviceDiscovery/serviceDiscovery-helper");
 
 // TODO: replace temporary cache with real cache
 var tokenCache = {};
@@ -23,17 +22,15 @@ var tokenCache = {};
  * @returns A tenant Id
  */
 module.exports.getTenantId = function (event) {
-    var tenantId = '';
-    var bearerToken = event.headers['Authorization'];
-    if (bearerToken) {
-        bearerToken = bearerToken.substring(bearerToken.indexOf(' ') + 1);
-        var decodedIdToken = jwtDecode(bearerToken);
-        if (decodedIdToken)
-            tenantId = decodedIdToken['custom:tenant_id'];
-    }
-    return tenantId;
-}
-
+  var tenantId = "";
+  var bearerToken = event.headers["Authorization"];
+  if (bearerToken) {
+    bearerToken = bearerToken.substring(bearerToken.indexOf(" ") + 1);
+    var decodedIdToken = jwtDecode(bearerToken);
+    if (decodedIdToken) tenantId = decodedIdToken["custom:tenant_id"];
+  }
+  return tenantId;
+};
 
 /**
  * Extract an id token from a request, decode it and extract the user role
@@ -41,19 +38,15 @@ module.exports.getTenantId = function (event) {
  * @param req A request
  * @returns A role
  */
-module.exports.getUserRole = function(event, callback) {
-
-    var bearerToken = event.headers['Authorization'];
-    if (bearerToken) {
-        bearerToken = bearerToken.substring(bearerToken.indexOf(' ') + 1);
-        var decodedIdToken = jwtDecode(bearerToken);
-        if (decodedIdToken)
-            callback(decodedIdToken['custom:role']);
-        else
-            callback('unkown');
-    }
-}
-
+module.exports.getUserRole = function (event, callback) {
+  var bearerToken = event.headers["Authorization"];
+  if (bearerToken) {
+    bearerToken = bearerToken.substring(bearerToken.indexOf(" ") + 1);
+    var decodedIdToken = jwtDecode(bearerToken);
+    if (decodedIdToken) callback(decodedIdToken["custom:role"]);
+    else callback("unkown");
+  }
+};
 
 /**
  * Decode and token and extract the user's full name from
@@ -61,75 +54,73 @@ module.exports.getUserRole = function(event, callback) {
  * @param idToken A bearer token
  * @returns The user's full name
  */
-module.exports.getUserFullName = function(idToken) {
-    var userFullName = '';
-    if (idToken) {
-        var decodedIdToken = jwtDecode(idToken);
-        if (decodedIdToken)
-            userFullName = {'firstName': decodedIdToken.given_name, 'lastName': decodedIdToken.family_name};
-    }
-    return userFullName;
-}
+module.exports.getUserFullName = function (idToken) {
+  var userFullName = "";
+  if (idToken) {
+    var decodedIdToken = jwtDecode(idToken);
+    if (decodedIdToken)
+      userFullName = {
+        firstName: decodedIdToken.given_name,
+        lastName: decodedIdToken.family_name,
+      };
+  }
+  return userFullName;
+};
 
 /**
  * Get the authorization token from a request
  * @param req The request with the authorization header
  * @returns The user's email address
  */
-module.exports.getRequestAuthToken = function(event) {
-    authToken = '';
-    var authHeader = event.headers['Authorization'];
-    if (authHeader)
-        var authToken = authHeader.substring(authHeader.indexOf(' ') + 1);
-    return authToken;
-}
-
+module.exports.getRequestAuthToken = function (event) {
+  authToken = "";
+  var authHeader = event.headers["Authorization"];
+  if (authHeader)
+    var authToken = authHeader.substring(authHeader.indexOf(" ") + 1);
+  return authToken;
+};
 
 /**
  * Decode and token and extract the token
  * @param bearerToken A bearer token
  * @returns The user's full name
  */
-module.exports.decodeToken = function(bearerToken) {
-    var resultToken = {};
-    if (bearerToken) {
-        var decodedIdToken = jwtDecode(bearerToken);
-        if (decodedIdToken)
-            resultToken = decodedIdToken;
-    }
-    return resultToken;
-}
+module.exports.decodeToken = function (bearerToken) {
+  var resultToken = {};
+  if (bearerToken) {
+    var decodedIdToken = jwtDecode(bearerToken);
+    if (decodedIdToken) resultToken = decodedIdToken;
+  }
+  return resultToken;
+};
 
 /**
  * Decode token and validate access
  * @param bearerToken A bearer token
  * @returns The users access is provided
  */
-module.exports.checkRole = function(bearerToken) {
-    var resultToken = {};
-    if (bearerToken) {
-        var decodedIdToken = jwtDecode(bearerToken);
-        if (decodedIdToken)
-            var resultToken = decodedIdToken['custom:role'];
-    }
-    return resultToken;
-
-}
+module.exports.checkRole = function (bearerToken) {
+  var resultToken = {};
+  if (bearerToken) {
+    var decodedIdToken = jwtDecode(bearerToken);
+    if (decodedIdToken) var resultToken = decodedIdToken["custom:role"];
+  }
+  return resultToken;
+};
 
 /**
  * Decode and token and extract the token
  * @param bearerToken A bearer token
  * @returns The user's full name
  */
-module.exports.decodeOpenID = function(bearerToken) {
-    var resultToken = {};
-    if (bearerToken) {
-        var decodedIdToken = jwtDecode(bearerToken);
-        if (decodedIdToken)
-            resultToken = decodedIdToken;
-    }
-    return resultToken;
-}
+module.exports.decodeOpenID = function (bearerToken) {
+  var resultToken = {};
+  if (bearerToken) {
+    var decodedIdToken = jwtDecode(bearerToken);
+    if (decodedIdToken) resultToken = decodedIdToken;
+  }
+  return resultToken;
+};
 
 /**
  * Get access credential from the passed in request
@@ -137,49 +128,53 @@ module.exports.decodeOpenID = function(bearerToken) {
  * @returns The access credentials
  */
 module.exports.getCredentialsFromToken = function (event, updateCredentials) {
-    var bearerToken = event.headers['Authorization'];
-    if (bearerToken) {
-        var tokenValue = bearerToken.substring(bearerToken.indexOf(' ') + 1);
-        if (!(tokenValue in tokenCache)) {
-            var decodedIdToken = jwtDecode(tokenValue);
-            var userName = decodedIdToken['cognito:username'];
-            async.waterfall([
-                function(callback) {
-                    getUserPoolWithParams(userName, callback)
-                },
-                function(userPool, callback) {
-                  authenticateUserInPool(userPool, tokenValue, callback)
-                }
-            ], function(error, results) {
-                if (error) {
-                    console.log('Error fetching credentials for user');
-                    console.log(error);
-                    var err = {statusCode: error.statusCode,
-                                message: error.message,
-                                code: error.code};
-                    updateCredentials(err, null);
-                    return;
-                }
-                else {
-                    tokenCache[tokenValue] = results;
-                    updateCredentials(null, results);
-                    return;
-                }
-            });
-        }
-        else if (tokenValue in tokenCache) {
-            updateCredentials(null, tokenCache[tokenValue]);
+  var bearerToken = event.headers["Authorization"];
+  if (bearerToken) {
+    var tokenValue = bearerToken.substring(bearerToken.indexOf(" ") + 1);
+    if (!(tokenValue in tokenCache)) {
+      var decodedIdToken = jwtDecode(tokenValue);
+      var userName = decodedIdToken["cognito:username"];
+      async.waterfall(
+        [
+          function (callback) {
+            getUserPoolWithParams(userName, callback);
+          },
+          function (userPool, callback) {
+            authenticateUserInPool(userPool, tokenValue, callback);
+          },
+        ],
+        function (error, results) {
+          if (error) {
+            console.log("Error fetching credentials for user");
+            console.log(error);
+            var err = {
+              statusCode: error.statusCode,
+              message: error.message,
+              code: error.code,
+            };
+            updateCredentials(err, null);
             return;
+          } else {
+            tokenCache[tokenValue] = results;
+            updateCredentials(null, results);
+            return;
+          }
         }
-    } else {
-        console.log('Error fetching credentials for user')
-        var err = {statusCode: 401,
-            message: "No Authorization",
-            code: "bad header"};
-        updateCredentials(err, null);
-        return;
+      );
+    } else if (tokenValue in tokenCache) {
+      updateCredentials(null, tokenCache[tokenValue]);
+      return;
     }
-
+  } else {
+    console.log("Error fetching credentials for user");
+    var err = {
+      statusCode: 401,
+      message: "No Authorization",
+      code: "bad header",
+    };
+    updateCredentials(err, null);
+    return;
+  }
 };
 
 /**
@@ -187,26 +182,29 @@ module.exports.getCredentialsFromToken = function (event, updateCredentials) {
  * @param user The username to lookup
  * @param callback Function called with found user pool
  */
-module.exports.getUserPool = function(userName, callback) {
-    // Create URL for user-manager request
+module.exports.getUserPool = function (userName, callback) {
+  // Create URL for user-manager request
 
-   // functionName = 'SaaSServerless-UserMgr-dev-lookupPool';
-    var functionName = serviceDiscovery.getServiceName(process.env.PROJECT_NAME,'UserMgr','lookupPool',process.env.stage);
+  // functionName = 'EnvyForgeIdentity-UserMgr-dev-lookupPool';
+  var functionName = serviceDiscovery.getServiceName(
+    process.env.PROJECT_NAME,
+    "UserMgr",
+    "lookupPool",
+    process.env.stage
+  );
 
-    var payLoad = {userName: userName};
+  var payLoad = { userName: userName };
 
-
-    RequestHelper.invokeLambda(functionName,payLoad)
-        .then((data) => {
-            callback(null,data);
-        })
-        .catch((err) => {
-            console.log("invokeLambda returned ERROR err = ");
-            console.log(err);
-            callback(err);
-        })
-
-}
+  RequestHelper.invokeLambda(functionName, payLoad)
+    .then((data) => {
+      callback(null, data);
+    })
+    .catch((err) => {
+      console.log("invokeLambda returned ERROR err = ");
+      console.log(err);
+      callback(err);
+    });
+};
 
 /**
  * Lookup the user pool from a user name
@@ -215,30 +213,32 @@ module.exports.getUserPool = function(userName, callback) {
  * @return params object with user pool and idToken
  */
 function getUserPoolWithParams(userName, callback) {
+  //    functionName = 'EnvyForgeIdentity-UserMgr-dev-lookupPool';
+  var functionName = serviceDiscovery.getServiceName(
+    process.env.PROJECT_NAME,
+    "UserMgr",
+    "lookupPool",
+    process.env.stage
+  );
 
+  var payLoad = { userName: userName };
 
-//    functionName = 'SaaSServerless-UserMgr-dev-lookupPool';
-    var functionName = serviceDiscovery.getServiceName(process.env.PROJECT_NAME,'UserMgr','lookupPool',process.env.stage);
-
-    var payLoad = {userName: userName};
-
-
-    RequestHelper.invokeLambda(functionName,payLoad)
-        .then((data) => {
-            callback(null,data);
-        })
-        .catch((err) => {
-            console.log("invokeLambda returned ERROR err = ");
-            console.log(err);
-            callback(err);
-            /***** old versuib
+  RequestHelper.invokeLambda(functionName, payLoad)
+    .then((data) => {
+      callback(null, data);
+    })
+    .catch((err) => {
+      console.log("invokeLambda returned ERROR err = ");
+      console.log(err);
+      callback(err);
+      /***** old versuib
              *  var err = {
                     statusCode: response.statusCode,
                     statusMessage: response.statusMessage,
                     message: body.Error ? body.Error : ''
                 }
              */
-        })
+    });
 }
 
 /**
@@ -246,32 +246,35 @@ function getUserPoolWithParams(userName, callback) {
  * @param user The username to lookup
  * @param callback Function called with found user pool
  */
-module.exports.getInfra = function(input, callback) {
-    // Create URL for user-manager request
-    // var userURL = userURL + '/system/' + userName;
-    var tenantsUrl   = configuration.url.tenant + 's/system/';
-    request({
-        url: tenantsUrl,
-        method: "GET",
-        json: true,
-        headers: {
-            "content-type": "application/json",
+module.exports.getInfra = function (input, callback) {
+  // Create URL for user-manager request
+  // var userURL = userURL + '/system/' + userName;
+  var tenantsUrl = configuration.url.tenant + "s/system/";
+  request(
+    {
+      url: tenantsUrl,
+      method: "GET",
+      json: true,
+      headers: {
+        "content-type": "application/json",
+      },
+    },
+    function (error, response, body) {
+      if (!error && response.statusCode === 200) {
+        callback(null, body);
+      } else {
+        if (!error) {
+          var lookupError = new Error(
+            "Failed looking up infra: " + response.body.Error
+          );
+          callback(lookupError, response);
+        } else {
+          callback(error, response);
         }
-    }, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            callback(null, body);
-        }
-        else {
-            if (!error) {
-                var lookupError = new Error("Failed looking up infra: " + response.body.Error);
-                callback(lookupError, response);
-            }
-            else {
-                callback(error, response)
-            }
-        }
-    });
-}
+      }
+    }
+  );
+};
 
 /**
  * Perform an HTTP Request
@@ -283,32 +286,31 @@ module.exports.getInfra = function(input, callback) {
  * @param json true/false
  * @return Fire off request and return result
  */
-module.exports.fireRequest = function(event, callback) {
-
-    var protocol = event.protocol;
-    var path = event.path;
-    var delimiter = '://';
-    var domain = event.domain;
-    var url = protocol + delimiter + domain + path;
-    // fire the request
-    request({
-        url: url,
-        method: event.method,
-        json: true,
-        headers: {
-            "content-type": "application/json",
-        }
-    }, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            callback(body);
-        }
-        else {
-            callback(null, 'Error making request. \nError: ' + error);
-        }
-    });
+module.exports.fireRequest = function (event, callback) {
+  var protocol = event.protocol;
+  var path = event.path;
+  var delimiter = "://";
+  var domain = event.domain;
+  var url = protocol + delimiter + domain + path;
+  // fire the request
+  request(
+    {
+      url: url,
+      method: event.method,
+      json: true,
+      headers: {
+        "content-type": "application/json",
+      },
+    },
+    function (error, response, body) {
+      if (!error && response.statusCode === 200) {
+        callback(body);
+      } else {
+        callback(null, "Error making request. \nError: " + error);
+      }
+    }
+  );
 };
-
-
 
 /**
  * Authenticate the user in the user pool
@@ -317,41 +319,44 @@ module.exports.fireRequest = function(event, callback) {
  * @param callback The callback for completion
  */
 function authenticateUserInPool(userPool, idToken, callback) {
-    var decodedIdToken = jwtDecode(idToken);
-    var provider = decodedIdToken.iss;
-    provider = provider.replace('https://', '');
-    var params = {
+  var decodedIdToken = jwtDecode(idToken);
+  var provider = decodedIdToken.iss;
+  provider = provider.replace("https://", "");
+  var params = {
+    token: idToken,
+    provider: provider,
+    IdentityPoolId: userPool.IdentityPoolId,
+  };
+  var getIdentity = getId(params, function (err, data) {
+    if (err) {
+      console.log("authenticateUserInPool: from getId: got err =");
+      console.log(err);
+      callback(err);
+    } else {
+      var params = {
         token: idToken,
+        IdentityId: data.IdentityId,
         provider: provider,
-        IdentityPoolId: userPool.IdentityPoolId
-    }
-    var getIdentity = getId(params, function (err, data) {
+      };
+      var returnedIdentity = data;
+      var getCredentials = getCredentialsForIdentity(params, function (
+        err,
+        data
+      ) {
         if (err) {
-            console.log('authenticateUserInPool: from getId: got err =');
-            console.log(err);
-            callback( err);
-        }
-        else {
-           var params = {
-                token: idToken,
-                IdentityId: data.IdentityId,
-                provider: provider
-            }
-            var returnedIdentity = data;
-            var getCredentials = getCredentialsForIdentity(params, function (err, data) {
-                if (err) {
-                    console.log('authenticateUserInPool: from getCredentialsForIdentity:  err');
-                    callback( err);
-                } else {
-                    var returnedCredentials = data;
+          console.log(
+            "authenticateUserInPool: from getCredentialsForIdentity:  err"
+          );
+          callback(err);
+        } else {
+          var returnedCredentials = data;
 
-                    // put claim and user full name into one response
-                    callback(null, {"claim": returnedCredentials.Credentials});
-                }
-            })
+          // put claim and user full name into one response
+          callback(null, { claim: returnedCredentials.Credentials });
         }
-
-    })
+      });
+    }
+  });
 }
 
 /**
@@ -361,27 +366,31 @@ function authenticateUserInPool(userPool, idToken, callback) {
  * @param callback The callback for completion
  */
 function getCredentialsForIdentity(event, callback) {
-    var cognitoidentity = new AWS.CognitoIdentity({apiVersion: '2014-06-30',region: configuration.aws_region});
-    var params = {
-        IdentityId: event.IdentityId, /* required */
-        //CustomRoleArn: 'STRING_VALUE',
-        Logins: {
-            [event.provider]: event.token,
-            /* '<IdentityProviderName>': ... */
-        }
-    };
+  var cognitoidentity = new AWS.CognitoIdentity({
+    apiVersion: "2014-06-30",
+    region: configuration.aws_region,
+  });
+  var params = {
+    IdentityId: event.IdentityId /* required */,
+    //CustomRoleArn: 'STRING_VALUE',
+    Logins: {
+      [event.provider]: event.token,
+      /* '<IdentityProviderName>': ... */
+    },
+  };
 
-    cognitoidentity.getCredentialsForIdentity(params, function (err, data) {
-        if (err) {
-            console.log("getCredentialsForIdentity: callback from cognitoidentity.getCredentialsForIdentity err =");
-            console.log(err, err.stack);
-            callback(err);
-        }
-        else {
-            callback(null, data);
-        }
-    });
-};
+  cognitoidentity.getCredentialsForIdentity(params, function (err, data) {
+    if (err) {
+      console.log(
+        "getCredentialsForIdentity: callback from cognitoidentity.getCredentialsForIdentity err ="
+      );
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(null, data);
+    }
+  });
+}
 
 /**
  * Get Cognito Federated identity
@@ -389,27 +398,29 @@ function getCredentialsForIdentity(event, callback) {
  * @param AccountId The AWS Account Number
  * @param Logins Provider Map Provider : ID Token
  */
-function getId (event, callback) {
-    var cognitoidentity = new AWS.CognitoIdentity({apiVersion: '2014-06-30',region: configuration.aws_region});
-    var params = {
-        IdentityPoolId: event.IdentityPoolId, /* required */
-       /*  AccountId: configuration.aws_account, not required */
-        Logins: {
-            [event.provider]: event.token,
-            /* '<IdentityProviderName>': ... */
-        }
-    };
+function getId(event, callback) {
+  var cognitoidentity = new AWS.CognitoIdentity({
+    apiVersion: "2014-06-30",
+    region: configuration.aws_region,
+  });
+  var params = {
+    IdentityPoolId: event.IdentityPoolId /* required */,
+    /*  AccountId: configuration.aws_account, not required */
+    Logins: {
+      [event.provider]: event.token,
+      /* '<IdentityProviderName>': ... */
+    },
+  };
 
-    cognitoidentity.getId(params, function (err, data) {
-        if (err) {
-            console.log(err, err.stack);
-            callback(err);
-        }
-        else {
-            callback(null,data);
-        }
-    });
-};
+  cognitoidentity.getId(params, function (err, data) {
+    if (err) {
+      console.log(err, err.stack);
+      callback(err);
+    } else {
+      callback(null, data);
+    }
+  });
+}
 
 /**
  * Perform an HTTP Request
@@ -422,56 +433,60 @@ function getId (event, callback) {
  * @return Fire off request and return result
  */
 function fireRequest(event, callback) {
+  var protocol = event.protocol;
+  var path = event.path;
+  var delimiter = "://";
+  var domain = event.domain;
+  var url = protocol + delimiter + domain + path;
+  // fire the request
+  request(
+    {
+      url: url,
+      method: event.method,
+      json: true,
+      headers: {
+        "content-type": "application/json",
+      },
+    },
+    function (error, response, body) {
+      if (!error && response.statusCode === 200) {
+        callback(body);
+      } else {
+        callback(null, "Error making request. \nError: " + error);
+      }
+    }
+  );
+}
 
-    var protocol = event.protocol;
-    var path = event.path;
-    var delimiter = '://';
-    var domain = event.domain;
-    var url = protocol + delimiter + domain + path;
-    // fire the request
-    request({
-        url: url,
-        method: event.method,
-        json: true,
-        headers: {
-            "content-type": "application/json",
-        }
-    }, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            callback(body);
-        }
-        else {
-            callback(null, 'Error making request. \nError: ' + error);
-        }
-    });
-};
+module.exports.getSystemCredentials = function (callback) {
+  var sysCreds = "";
+  var sysConfig = new AWS.Config();
+  sysConfig.getCredentials(function (err) {
+    if (err) {
+      console.log("Unable to Obtain Credentials");
+      callback(err);
+    } // credentials not loaded
+    else {
+      var tempCreds = sysConfig.credentials;
 
-module.exports.getSystemCredentials = function(callback) {
-    var sysCreds = '';
-    var sysConfig = new AWS.Config();
-    sysConfig.getCredentials(function(err) {
-
-        if (err) {
-            console.log('Unable to Obtain Credentials');
-            callback(err);
-        } // credentials not loaded
-        else{
-            var tempCreds = sysConfig.credentials;
-
-            var {accessKeyId, sessionToken,
-                    secretAccessKey, expireTime,
-                    envPrefix } = sysConfig.credentials;
-            sysCreds = {
-                SessionToken: sessionToken,
-                AccessKeyId: accessKeyId,
-                SecretKey: secretAccessKey,
-                Expiration: expireTime,
-                expireTime,
-                envPrefix,
-            }
-            var credentials = {"claim": sysCreds};
-           callback(null, credentials);
-            /*******
+      var {
+        accessKeyId,
+        sessionToken,
+        secretAccessKey,
+        expireTime,
+        envPrefix,
+      } = sysConfig.credentials;
+      sysCreds = {
+        SessionToken: sessionToken,
+        AccessKeyId: accessKeyId,
+        SecretKey: secretAccessKey,
+        Expiration: expireTime,
+        expireTime,
+        envPrefix,
+      };
+      var credentials = { claim: sysCreds };
+      callback(null, credentials);
+      /*******
              * use default properties to get data -
              * following code not needed
 
@@ -493,9 +508,6 @@ module.exports.getSystemCredentials = function(callback) {
                 callback(null, credentials);
             }
              **/
-
-
-        }
-    })
-
-}
+    }
+  });
+};
