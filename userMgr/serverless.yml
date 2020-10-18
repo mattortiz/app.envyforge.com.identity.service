@@ -35,7 +35,7 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs12.x
   timeout: 30 #set timeout to 30 seconds
   iamRoleStatements:
     - Effect: "Allow"
@@ -78,25 +78,22 @@ provider:
     PRODUCT_TABLE: ${self:custom.table.product}
 
     restApiId:
-      'Fn::ImportValue': ${self:custom.stage}-SaaSServerlessApiRestApiId
-    apiURL:
-      ${file(../common/common.yml):${self:custom.stage}.apiURL, file(../common/common.yml):dev.apiURL}
-    PROJECT_NAME:
-      ${cf:SaaSServerless-common-${self:custom.stage}.ProjectName,'SaaSServerless'}
-    serviceURL:
-      ${file(../common/common.yml):${self:custom.stage}.serviceURL, file(../common/common.yml):dev.serviceURL}
+      "Fn::ImportValue": ${self:custom.stage}-SaaSServerlessApiRestApiId
+    apiURL: ${file(../common/common.yml):${self:custom.stage}.apiURL, file(../common/common.yml):dev.apiURL}
+    PROJECT_NAME: ${cf:SaaSServerless-common-${self:custom.stage}.ProjectName,'SaaSServerless'}
+    serviceURL: ${file(../common/common.yml):${self:custom.stage}.serviceURL, file(../common/common.yml):dev.serviceURL}
 
     SNS_ROLE_ARN:
-      'Fn::ImportValue': ${self:custom.stage}-SaaSServerlessSNSRoleArn
+      "Fn::ImportValue": ${self:custom.stage}-SaaSServerlessSNSRoleArn
 
     NODE_CONFIG_DIR: ${self:custom.configdir.${self:custom.stage}}
 
   # define share ApiGateway
   apiGateway:
     restApiId:
-      'Fn::ImportValue': ${self:custom.stage}-SaaSServerlessApiRestApiId
+      "Fn::ImportValue": ${self:custom.stage}-SaaSServerlessApiRestApiId
     restApiRootResourceId:
-      'Fn::ImportValue': ${self:custom.stage}-SaaSServerlessApiRestApiRootResourceId
+      "Fn::ImportValue": ${self:custom.stage}-SaaSServerlessApiRestApiRootResourceId
 
 functions:
   - ${file(${self:custom.userdir}userMgr-functions.yml)}
@@ -105,7 +102,7 @@ functions:
 resources:
   Resources:
     UserDB:
-      Type: 'AWS::DynamoDB::Table'
+      Type: "AWS::DynamoDB::Table"
       Properties:
         AttributeDefinitions:
           - AttributeName: tenant_id

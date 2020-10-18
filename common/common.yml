@@ -1,18 +1,18 @@
 dev:
-  region: us-east-1
+  region: us-west-2
 
   apiURL:
     Fn::Join:
-    - ""
-    - - "https://"
-      - 'Fn::ImportValue': ${self:custom.stage}-SaaSServerlessApiRestApiId
-      - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.stage}"
+      - ""
+      - - "https://"
+        - "Fn::ImportValue": ${self:custom.stage}-SaaSServerlessApiRestApiId
+        - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.stage}"
 
   serviceURL:
     Fn::Join:
       - ""
       - - "https://"
-        - 'Fn::ImportValue': ${self:custom.stage}-ServiceDiscoveryRestApiId
+        - "Fn::ImportValue": ${self:custom.stage}-ServiceDiscoveryRestApiId
         - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.stage}"
 
   authorizer:
@@ -31,10 +31,10 @@ dev:
             Ref: SaaSServerlessApiGateway
           AuthorizerUri:
             Fn::Join:
-              - ''
-              - - 'arn:aws:apigateway:'
+              - ""
+              - - "arn:aws:apigateway:"
                 - Ref: "AWS::Region"
-                - ':lambda:path/2015-03-31/functions/'
+                - ":lambda:path/2015-03-31/functions/"
                 - Fn::GetAtt: "GeneralAuthorizerLambdaFunction.Arn"
                 - "/invocations"
           Type: TOKEN
@@ -47,7 +47,7 @@ dev:
           Path: /
           RoleName: SaaSServerlessApiLambdaRole
           AssumeRolePolicyDocument:
-            Version: '2012-10-17'
+            Version: "2012-10-17"
             Statement:
               - Effect: Allow
                 Sid: ""
@@ -57,37 +57,37 @@ dev:
           Policies:
             - PolicyName: SaaSServerless-ApiLambdaPolicy
               PolicyDocument:
-                Version: '2012-10-17'
+                Version: "2012-10-17"
                 Statement:
                   - Effect: Allow
                     Action: lambda:InvokeFunction
-                    Resource: '*'
+                    Resource: "*"
 
       GatewayResponseDefault4XX:
-        Type: 'AWS::ApiGateway::GatewayResponse'
+        Type: "AWS::ApiGateway::GatewayResponse"
         Properties:
           ResponseParameters:
             gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
             gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
           ResponseType: DEFAULT_4XX
           RestApiId:
-            Ref: 'SaaSServerlessApiGateway'
+            Ref: "SaaSServerlessApiGateway"
       GatewayResponseDefault5XX:
-        Type: 'AWS::ApiGateway::GatewayResponse'
+        Type: "AWS::ApiGateway::GatewayResponse"
         Properties:
           ResponseParameters:
             gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
             gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
           ResponseType: DEFAULT_5XX
           RestApiId:
-            Ref: 'SaaSServerlessApiGateway'
+            Ref: "SaaSServerlessApiGateway"
       SNSRole:
         Type: AWS::IAM::Role
         Properties:
           Path: /
           RoleName: SNSRole
           AssumeRolePolicyDocument:
-            Version: '2012-10-17'
+            Version: "2012-10-17"
             Statement:
               - Effect: Allow
                 Principal:
@@ -96,27 +96,25 @@ dev:
           Policies:
             - PolicyName: SaaSServerless-SNSRolePolicy
               PolicyDocument:
-                Version: '2012-10-17'
+                Version: "2012-10-17"
                 Statement:
                   - Sid: SNS
                     Effect: Allow
                     Action: sns:publish
-                    Resource: '*'
-
+                    Resource: "*"
 
 local:
   apiURL: "http://localhost:3001/"
   authorizer: customAuthFunc
-  region: us-east-1
+  region: us-west-2
 
   resources:
 
-
 localdev:
-  region: us-east-1
+  region: us-west-2
   apiURL:
     Fn::Join:
       - ""
       - - "https://"
-        - 'Fn::ImportValue': ${self:custom.stage}-SaaSServerlessApiRestApiId
+        - "Fn::ImportValue": ${self:custom.stage}-SaaSServerlessApiRestApiId
         - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.stage}"
