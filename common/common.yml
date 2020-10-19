@@ -17,7 +17,7 @@ dev:
 
   authorizer:
     type: CUSTOM
-    authorizerId: ${cf:EnvyForgeIdentity-common-${self:custom.stage}.ApiGatewayAuthorizerId}
+    authorizerId: ${cf:EnvyForgeIdentity-Common-${self:custom.stage}.ApiGatewayAuthorizerId}
 
   resources:
     Resources:

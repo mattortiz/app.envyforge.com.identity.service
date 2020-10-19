@@ -62,7 +62,7 @@ provider:
     restApiId:
       "Fn::ImportValue": ${self:custom.stage}-EnvyForgeIdentityApiRestApiId
     apiURL: ${file(../common/common.yml):${self:custom.stage}.apiURL, file(../common/common.yml):dev.apiURL}
-    PROJECT_NAME: ${cf:EnvyForgeIdentity-common-${self:custom.stage}.ProjectName,'EnvyForgeIdentity'}
+    PROJECT_NAME: ${cf:EnvyForgeIdentity-Common-${self:custom.stage}.ProjectName,'EnvyForgeIdentity'}
     serviceURL: ${file(../common/common.yml):${self:custom.stage}.serviceURL, file(../common/common.yml):dev.serviceURL}
 
     SNS_ROLE_ARN:
