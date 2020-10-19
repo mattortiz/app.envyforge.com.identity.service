@@ -75,7 +75,7 @@ You will need to cleanup and remove the resources so that you are not charged fo
 - Now run the following command from the **`<code-dir>/app.envyforge.com.identity/service/ directory`**. 
 
 ```
-.../service > .teardown-services.sh
+.../service > ./teardown-services.sh
 ```
 
 It may take a few minutes for AWS to remove all the resources.
