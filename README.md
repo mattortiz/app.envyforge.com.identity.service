@@ -40,14 +40,14 @@ The architecture was changed from using EC2 instances for the microservices, to 
 
 The following steps will install and setup the microservices on AWS, using your AWS account. Make sure your account has Admin permissions, or permissions to create resources on AWS.
 
-1. cd `<code-dir>`/app.envyforge.com.identity/service
-2. cd serviceDiscovery
-3. npm install
-4. sls deploy
-5. cd ../common
-6. npm install -g npm-run-all
-7. npm run installAll
-8. npm run deployAll
+1. Discovery Service: from the **`<code-dir>/app.envyforge.com.identity/service/`** directory, run the following command: 
+   ```
+   .../service > ./setup-discovery-service.sh
+   ```
+2. Identity Services: from the **`<code-dir>/app.envyforge.com.identity/service/`** directory, run the following command: 
+   ```
+   .../service > ./setup-identity-services.sh
+   ```
 
 Next step
 
